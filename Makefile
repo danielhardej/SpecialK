@@ -1,24 +1,10 @@
-CFLAGS=-m32 -ffreestanding -O2 -Wall -Wextra
-LDFLAGS=-m elf_i386 -T linker.ld
+all: kernel.bin
 
-all: os-image
+kernel.o: kernel/kernel.cpp
+	g++ -m32 -ffreestanding -O2 -Wall -Wextra -c kernel/kernel.cpp -o kernel/kernel.o
 
-os-image: boot/boot.bin kernel/kernel.bin
-	@echo "Creating OS image..."
-	cat $^ > os-image
-
-boot/boot.bin: boot/boot.asm
-	@echo "Assembling bootloader..."
-	nasm -f elf boot/boot.asm -o boot/boot.o
-
-kernel/kernel.bin: kernel/kernel.o
-	@echo "Linking kernel..."
-	ld $(LDFLAGS) -o $@ $<
-
-kernel/kernel.o: kernel/kernel.c
-	@echo "Compiling kernel..."
-	gcc $(CFLAGS) -c $< -o $@
+kernel.bin: kernel/kernel.o
+	g++ -m32 -nostdlib -o kernel/kernel.bin kernel/kernel.o -Wl,-T,linker.ld
 
 clean:
-	@echo "Cleaning up..."
-	rm -f boot/boot.bin kernel/kernel.o kernel/kernel.bin os-image
+	rm -f kernel/*.o kernel/kernel.bin
