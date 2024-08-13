@@ -11,6 +11,6 @@ void kernel_main() {
 
     while (1) {
         // Halt the CPU
-        __asm__ __volatile__("hlt");
+        // __asm__ __volatile__("hlt");
     }
 }

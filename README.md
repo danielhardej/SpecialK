@@ -13,8 +13,14 @@ The code in this project will create a simple kernel that prints "Hello, World!"
 
 ## How to build
 
+You'll need the `nasm` assembler. On macOS, you can install it with Homebrew:
+
 ```bash
-$ make
+brew install nasm
+```
+
+```bash
+make
 ```
 
 ## How to run

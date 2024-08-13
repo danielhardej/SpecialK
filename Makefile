@@ -4,16 +4,21 @@ LDFLAGS=-m elf_i386 -T linker.ld
 all: os-image
 
 os-image: boot/boot.bin kernel/kernel.bin
-    cat $^ > os-image
+	@echo "Creating OS image..."
+	cat $^ > os-image
 
 boot/boot.bin: boot/boot.asm
-    nasm -f bin $< -o $@
+	@echo "Assembling bootloader..."
+	nasm -f elf boot/boot.asm -o boot/boot.o
 
 kernel/kernel.bin: kernel/kernel.o
-    ld $(LDFLAGS) -o $@ $<
+	@echo "Linking kernel..."
+	ld $(LDFLAGS) -o $@ $<
 
 kernel/kernel.o: kernel/kernel.c
-    gcc $(CFLAGS) -c $< -o $@
+	@echo "Compiling kernel..."
+	gcc $(CFLAGS) -c $< -o $@
 
 clean:
-    rm -f boot/boot.bin kernel/kernel.o kernel/kernel.bin os-image
+	@echo "Cleaning up..."
+	rm -f boot/boot.bin kernel/kernel.o kernel/kernel.bin os-image
